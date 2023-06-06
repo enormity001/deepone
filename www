@@ -5455,8 +5455,8 @@ function unityFramework(Module) {
                 wr.responses[requestId] = response;
                 HandleSuccess(response, response.parsedBody);   
                  try{
-                  decryptData(new Uint8Array(postData)).then(res=>{
-                        console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(response.parsedBody))
+                  decryptData(response.parsedBody).then(res=>{
+                        console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
                     })
                 }
                 catch(e){console.log(e)}
