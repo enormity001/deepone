@@ -15,7 +15,7 @@ function unityFramework(Module) {
 
         let encryptedDataArray = new Uint8Array(encryptedData);
 
-        console.log(encryptedDataArray);
+        
         return encryptedDataArray
     }
     async function decryptData(encryptedDataHex) {
@@ -30,7 +30,7 @@ function unityFramework(Module) {
         let decryptedData = await crypto.subtle.decrypt(algorithm, keyObject, encryptedDataHex);
 
         let decodedData = new TextDecoder().decode(decryptedData);
-        console.log(decodedData);
+       
         return decodedData
     }
     Module["decryptData"] = decryptData;
@@ -5430,7 +5430,7 @@ function unityFramework(Module) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
                 requestOptions.init.body = new Blob([postData]);
                 try{
-                    console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],decryptData(new Uint8Array(postData)));
+                    console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(decryptData(new Uint8Array(postData))));
                 }
                 catch(e){console.log(e)}
             }
@@ -5452,7 +5452,7 @@ function unityFramework(Module) {
                 wr.responses[requestId] = response;
                 HandleSuccess(response, response.parsedBody);   
                  try{
-                   requestOptions.url.split("api.sld-azuriteblue.com/")[1],decryptData(response.parsedBody);
+                   requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(decryptData(response.parsedBody));
                 }
                 catch(e){console.log(e)}
             }).catch(function(error) {
