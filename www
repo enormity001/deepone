@@ -5351,35 +5351,6 @@ function unityFramework(Module) {
         delete wr.timer[requestId]
     }
     
-async function encryptData(data) {
-
-  const key = new Uint8Array([3,10,75,202,71,140,142,187,73,91,99,87,47,27,170,232,143,60,15,160,244,185,188,244,39,143,56,220,169,38,32,104]);
-  const iv = new Uint8Array([155,4,45,157,19,98,94,209,110,134,204,180,219,170,60,27]);
-  const encodedData = new TextEncoder().encode(data);
-
-  const algorithm = { name: 'AES-CBC', iv };
-  const keyObject = await crypto.subtle.importKey('raw', key, algorithm, false, ['encrypt']);
-  const encryptedData = await crypto.subtle.encrypt(algorithm, keyObject, encodedData);
-
-  const encryptedDataArray = new Uint8Array(encryptedData);
-
-  console.log(encryptedDataArray);
-    return encryptedDataArray
-}
-async function decryptData(encryptedDataHex) {
-
-
-  const key = new Uint8Array([3,10,75,202,71,140,142,187,73,91,99,87,47,27,170,232,143,60,15,160,244,185,188,244,39,143,56,220,169,38,32,104]);
-  const iv = new Uint8Array([155,4,45,157,19,98,94,209,110,134,204,180,219,170,60,27]);
-  const algorithm = { name: 'AES-CBC', iv };
-  const keyObject = await crypto.subtle.importKey('raw', key, algorithm, false, ['decrypt']);
-  const decryptedData = await crypto.subtle.decrypt(algorithm, keyObject, encryptedDataHex);
-
-  const decodedData = new TextDecoder().decode(decryptedData);
-  console.log(decodedData);
-     return decodedData
-}
-
     function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
         var requestOptions = wr.requests[requestId];
         var abortController = wr.abortControllers[requestId];
