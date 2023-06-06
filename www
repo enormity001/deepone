@@ -1,5 +1,40 @@
 function unityFramework(Module) {
     var Module = typeof Module !== "undefined" ? Module : {};
+     async function encryptData(data) {
+
+        let  key = new Uint8Array([3, 10, 75, 202, 71, 140, 142, 187, 73, 91, 99, 87, 47, 27, 170, 232, 143, 60, 15, 160, 244, 185, 188, 244, 39, 143, 56, 220, 169, 38, 32, 104]);
+        let iv = new Uint8Array([155, 4, 45, 157, 19, 98, 94, 209, 110, 134, 204, 180, 219, 170, 60, 27]);
+        let encodedData = new TextEncoder().encode(data);
+
+        let algorithm = {
+            name: 'AES-CBC',
+            iv
+        };
+        let keyObject = await crypto.subtle.importKey('raw', key, algorithm, false, ['encrypt']);
+        let encryptedData = await crypto.subtle.encrypt(algorithm, keyObject, encodedData);
+
+        let encryptedDataArray = new Uint8Array(encryptedData);
+
+        console.log(encryptedDataArray);
+        return encryptedDataArray
+    }
+    async function decryptData(encryptedDataHex) {
+
+        let key = new Uint8Array([3, 10, 75, 202, 71, 140, 142, 187, 73, 91, 99, 87, 47, 27, 170, 232, 143, 60, 15, 160, 244, 185, 188, 244, 39, 143, 56, 220, 169, 38, 32, 104]);
+        let iv = new Uint8Array([155, 4, 45, 157, 19, 98, 94, 209, 110, 134, 204, 180, 219, 170, 60, 27]);
+        let algorithm = {
+            name: 'AES-CBC',
+            iv
+        };
+        let keyObject = await crypto.subtle.importKey('raw', key, algorithm, false, ['decrypt']);
+        let decryptedData = await crypto.subtle.decrypt(algorithm, keyObject, encryptedDataHex);
+
+        let decodedData = new TextDecoder().decode(decryptedData);
+        console.log(decodedData);
+        return decodedData
+    }
+    Module["decryptData"] = decryptData;
+    Module["encryptData"] = encryptData;
     function Pointer_stringify(s, len) {
         warnOnce("The JavaScript function 'Pointer_stringify(ptrToSomeCString)' is obsoleted and will be removed in a future Unity version. Please call 'UTF8ToString(ptrToSomeCString)' instead.");
         return UTF8ToString(s, len)
@@ -5393,7 +5428,11 @@ function unityFramework(Module) {
         try {
             if (length > 0) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
-                requestOptions.init.body = new Blob([postData])
+                requestOptions.init.body = new Blob([postData]);
+                try{
+                    console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],decryptData(new Uint8Array(postData)));
+                }
+                catch(e){console.log(e)}
             }
             if (requestOptions.timeout) {
                 wr.timer[requestId] = setTimeout(function() {
@@ -5411,7 +5450,11 @@ function unityFramework(Module) {
             }
             fetchImpl(requestOptions.url, requestOptions.init).then(function(response) {
                 wr.responses[requestId] = response;
-                HandleSuccess(response, response.parsedBody)
+                HandleSuccess(response, response.parsedBody);   
+                 try{
+                   requestOptions.url.split("api.sld-azuriteblue.com/")[1],decryptData(response.parsedBody);
+                }
+                catch(e){console.log(e)}
             }).catch(function(error) {
                 var kWebErrorUnknown = 2;
                 var kWebErrorAborted = 17;
@@ -23044,5 +23087,6 @@ function unityFramework(Module) {
     if (Module["noInitialRun"])
         shouldRunNow = false;
     run();
+
 
 }
