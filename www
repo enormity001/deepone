@@ -5430,7 +5430,7 @@ function unityFramework(Module) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
                 requestOptions.init.body = new Blob([postData]);
                 try{
-                    console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1]));
+                    console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1]);
                 }
                 catch(e){console.log(e)}
             }
