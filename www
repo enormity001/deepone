@@ -847,30 +847,30 @@ function unityFramework(Module) {
     var tempDouble;
     var tempI64;
     var ASM_CONSTS = {
-        6697640: function() {
+        6697704: function() {
             return Module.webglContextAttributes.premultipliedAlpha
         },
-        6697701: function() {
+        6697765: function() {
             return Module.webglContextAttributes.preserveDrawingBuffer
         },
-        6697765: function($0, $1) {
+        6697829: function($0, $1) {
             return setInterval(function() {
                 dynCall_v($0)
             }, $1)
         },
-        6697821: function($0) {
+        6697885: function($0) {
             return clearInterval($0)
         },
-        6697851: function($0, $1, $2) {
+        6697915: function($0, $1, $2) {
             HEAPF32[$0 >> 2] = Math.pow($1, $2)
         },
-        6697890: function($0, $1) {
+        6697954: function($0, $1) {
             HEAPF32[$0 >> 2] = Math.log($1)
         },
-        6697925: function($0, $1) {
+        6697989: function($0, $1) {
             HEAPF32[$0 >> 2] = Math.exp($1)
         },
-        6697960: function($0, $1) {
+        6698024: function($0, $1) {
             HEAPF32[$0 >> 2] = Math.pow(2, $1)
         }
     };
@@ -5409,11 +5409,12 @@ function unityFramework(Module) {
         try {
             if (length > 0) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
-                requestOptions.init.body = new Blob([postData]),
-                   try{
-                    decryptData(new Uint8Array(postData)).then(res=>{
-                        console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
-                    })
+                requestOptions.init.body = new Blob([postData]);
+                try{
+                    if(requestOptions.url.includes("api.sld-azuriteblue.com/"))
+                        decryptData(new Uint8Array(postData)).then(res=>{
+                            console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
+                        })
                     
                 }
                 catch(e){console.log(e)}
@@ -5434,13 +5435,17 @@ function unityFramework(Module) {
             }
             fetchImpl(requestOptions.url, requestOptions.init).then(function(response) {
                 wr.responses[requestId] = response;
-                HandleSuccess(response, response.parsedBody),
-                     try{
-                  decryptData(response.parsedBody).then(res=>{
+                HandleSuccess(response, response.parsedBody)
+                try{
+                    if(requestOptions.url.includes("api.sld-azuriteblue.com/"))
+                        try{
+                        decryptData(response.parsedBody).then(res=>{
                         console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
                     })
+                    
                 }
                 catch(e){console.log(e)}
+                
             }).catch(function(error) {
                 var kWebErrorUnknown = 2;
                 var kWebErrorAborted = 17;
