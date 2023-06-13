@@ -5436,7 +5436,7 @@ function unityFramework(Module) {
             fetchImpl(requestOptions.url, requestOptions.init).then(function(response) {
                 wr.responses[requestId] = response;
                 HandleSuccess(response, response.parsedBody)
-                try{
+                
                     if(requestOptions.url.includes("api.sld-azuriteblue.com/"))
                         try{
                         decryptData(response.parsedBody).then(res=>{
