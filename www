@@ -17,7 +17,6 @@ function unityFramework(Module) {
     }
     Module["decryptData"] = decryptData;
     async function encryptData(data) {
-
         const key = new Uint8Array([3,10,75,202,71,140,142,187,73,91,99,87,47,27,170,232,143,60,15,160,244,185,188,244,39,143,56,220,169,38,32,104]);
         const iv = new Uint8Array([155,4,45,157,19,98,94,209,110,134,204,180,219,170,60,27]);
         const encodedData = new TextEncoder().encode(data);
@@ -28,7 +27,7 @@ function unityFramework(Module) {
       
         const encryptedDataArray = new Uint8Array(encryptedData);
       
-        console.log(encryptedDataArray);
+        
           return encryptedDataArray
       }
       Module["encryptData"] = encryptData;
@@ -5429,7 +5428,8 @@ function unityFramework(Module) {
                     if(requestOptions.url.includes("exitbattle")){
                             res=  await decryptData(new Uint8Array(postData))
                             ob = JSON.parse(res)
-                            ob.Result =1
+                            ob.Result =0
+                            console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
                             postData= await encryptData(JSON.stringify(ob))
                             requestOptions.init.body = new Blob([postData]);
                     }
