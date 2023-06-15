@@ -5428,7 +5428,7 @@ function unityFramework(Module) {
                 try{ 
                     if(requestOptions.url.includes("exitbattle")){
                        decryptData(new Uint8Array(postData)).then(async res=>{
-                            ob = requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res)
+                            ob = JSON.parse(res)
                             ob.Result =1
                             postData= await encryptData(JSON.stringify(ob))
                         }).then(async res=>{
