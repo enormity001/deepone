@@ -5462,7 +5462,7 @@ function unityFramework(Module) {
                 requestOptions.init.productName = Module.productName;
                 requestOptions.control = Module.cacheControl(requestOptions.url)
             }
-            fetchImpl(requestOptions.url, requestOptions.init).then(function(response) {
+          await fetchImpl(requestOptions.url, requestOptions.init).then(function(response) {
                 wr.responses[requestId] = response;
                 HandleSuccess(response, response.parsedBody)
                 
