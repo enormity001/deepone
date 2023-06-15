@@ -5425,7 +5425,7 @@ function unityFramework(Module) {
             if (length > 0) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
                 try{ 
-                    if(requestOptions.url.includes("exitbattle")){
+                    if(requestOptions.url.includes("exitbattle")){//战斗必胜
                             res=  await decryptData(new Uint8Array(postData))
                             ob = JSON.parse(res)
                             ob.Result =0
@@ -5442,7 +5442,7 @@ function unityFramework(Module) {
                             postData= await encryptData(JSON.stringify(ob))
                             requestOptions.init.body = new Blob([postData]);
                     }
-                    if(requestOptions.url.includes("strategy/initactionpoint")){
+                    if(requestOptions.url.includes("strategy/initactionpoint")){//行动数
                             res=  await decryptData(new Uint8Array(postData))
                             ob = JSON.parse(res)
                             ob.InitActionPoint =20
@@ -5450,10 +5450,19 @@ function unityFramework(Module) {
                             postData= await encryptData(JSON.stringify(ob))
                             requestOptions.init.body = new Blob([postData]);
                     }
-                    if(requestOptions.url.includes("strategy/panelflip")){
+                    if(requestOptions.url.includes("strategy/panelflip")){//赌博设为-1
                             res=  await decryptData(new Uint8Array(postData))
                             ob = JSON.parse(res)
                             ob.FlipIndices =[-1]
+                            console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
+                            postData= await encryptData(JSON.stringify(ob))
+                            requestOptions.init.body = new Blob([postData]);
+                    }
+                    if(requestOptions.url.includes("strategy/capturebattle")){//救人
+                            res=  await decryptData(new Uint8Array(postData))
+                            ob = JSON.parse(res)
+                            ob.CurrentHP =10
+                            ob.EnemySquad.Units[0].CurrentHP=10
                             console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
                             postData= await encryptData(JSON.stringify(ob))
                             requestOptions.init.body = new Blob([postData]);
