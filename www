@@ -5420,7 +5420,7 @@ function unityFramework(Module) {
             if (!onprogress || !e.lengthComputable) {
                 return
             }
-          await  dynCall("viii", onprogress, [arg, e.loaded, e.total])
+          dynCall("viii", onprogress, [arg, e.loaded, e.total])
         }
         try {
             if (length > 0) {
