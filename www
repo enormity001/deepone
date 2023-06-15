@@ -5382,7 +5382,7 @@ function unityFramework(Module) {
         delete wr.abortControllers[requestId];
         delete wr.timer[requestId]
     }
-   async function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
+    function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
         var requestOptions = wr.requests[requestId];
         var abortController = wr.abortControllers[requestId];
         function ClearTimeout() {
@@ -5427,19 +5427,22 @@ function unityFramework(Module) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
                 try{ 
                     if(requestOptions.url.includes("exitbattle")){
-                    let res = await decryptData(new Uint8Array(postData))
-                    let ob = JSON.parse(res)
-                    ob.Result =1
-                    postData= await encryptData(JSON.stringify(ob))
-                    requestOptions.init.body = new Blob([postData]);
-                     
+                      decryptData(new Uint8Array(postData)).then(async res=>{
+                            ob = JSON.parse(res)
+                            ob.Result =1
+                            postData= await encryptData(JSON.stringify(ob))
+                        }).then(async res=>{
+                            requestOptions.init.body = new Blob([postData]);
+                        })
                     }
 
                     else if(requestOptions.url.includes("api.sld-azuriteblue.com/")){
-                        let res = await decryptData(new Uint8Array(postData))
-                        console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
-                        requestOptions.init.body = new Blob([postData]);
-                    }else{
+                       decryptData(new Uint8Array(postData)).then(res=>{
+                            console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
+                        }).then(async res=>{
+                            requestOptions.init.body = new Blob([postData]);
+                        })
+                    }else {
                         requestOptions.init.body = new Blob([postData]);
                     }
                 }
