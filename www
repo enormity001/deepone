@@ -5502,7 +5502,7 @@ function unityFramework(Module) {
                 console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
                 data= await encryptData(JSON.stringify(ob))
                 response.parsedBody= data;
-            }else {
+            }else if(requestOptions.url.includes("api.sld-azuriteblue.com/")){
                 res=  await decryptData(response.parsedBody)
                 ob = JSON.parse(res)
                 console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
