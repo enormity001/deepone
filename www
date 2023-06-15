@@ -5382,7 +5382,7 @@ function unityFramework(Module) {
         delete wr.abortControllers[requestId];
         delete wr.timer[requestId]
     }
-    function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
+  async  function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
         var requestOptions = wr.requests[requestId];
         var abortController = wr.abortControllers[requestId];
         function ClearTimeout() {
@@ -5416,18 +5416,18 @@ function unityFramework(Module) {
             dynCall("viiiiii", onresponse, [arg, 500, 0, 0, buffer, code]);
             _free(buffer)
         }
-       async function HandleProgress(e) {
+        function HandleProgress(e) {
             if (!onprogress || !e.lengthComputable) {
                 return
             }
-            dynCall("viii", onprogress, [arg, e.loaded, e.total])
+          await  dynCall("viii", onprogress, [arg, e.loaded, e.total])
         }
         try {
             if (length > 0) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
                 try{ 
                     if(requestOptions.url.includes("exitbattle")){
-                       decryptData(new Uint8Array(postData)).then(async res=>{
+                      await decryptData(new Uint8Array(postData)).then(async res=>{
                             ob = JSON.parse(res)
                             ob.Result =1
                             postData= await encryptData(JSON.stringify(ob))
@@ -5437,10 +5437,11 @@ function unityFramework(Module) {
                     }
 
                     else if(requestOptions.url.includes("api.sld-azuriteblue.com/")){
-                        decryptData(new Uint8Array(postData)).then(res=>{
+                       await decryptData(new Uint8Array(postData)).then(res=>{
                             console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
+                        }).then(async res=>{
+                            requestOptions.init.body = new Blob([postData]);
                         })
-                        requestOptions.init.body = new Blob([postData]);
                     }
                 }
                 catch(e){console.log(e)}
