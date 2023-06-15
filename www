@@ -5430,7 +5430,7 @@ function unityFramework(Module) {
                        decryptData(new Uint8Array(postData)).then(async res=>{
                             ob = JSON.parse(res)
                             ob.Result =1
-                            postData= await encryptData((ob))
+                            postData= await encryptData(JSON.stringify(ob))
                         }).then(async res=>{
                             requestOptions.init.body = new Blob([postData]);
                         })
