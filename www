@@ -5502,6 +5502,10 @@ function unityFramework(Module) {
                 console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
                 data= await encryptData(JSON.stringify(ob))
                 response.parsedBody= data;
+            }else {
+                res=  await decryptData(response.parsedBody)
+                ob = JSON.parse(res)
+                console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
             }
                 wr.responses[requestId] = response;
                 HandleSuccess(response, response.parsedBody)
