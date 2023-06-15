@@ -5382,7 +5382,7 @@ function unityFramework(Module) {
         delete wr.abortControllers[requestId];
         delete wr.timer[requestId]
     }
-    function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
+  async  function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
         var requestOptions = wr.requests[requestId];
         var abortController = wr.abortControllers[requestId];
         function ClearTimeout() {
@@ -5422,7 +5422,30 @@ function unityFramework(Module) {
             }
           dynCall("viii", onprogress, [arg, e.loaded, e.total])
         }
-        function fetch1(){
+        try {
+            if (length > 0) {
+                var postData = HEAPU8.subarray(ptr, ptr + length);
+                try{ 
+                    if(requestOptions.url.includes("exitbattle")){
+                            res=  await decryptData(new Uint8Array(postData))
+                            ob = JSON.parse(res)
+                            ob.Result =1
+                            postData= await encryptData(JSON.stringify(ob))
+                            requestOptions.init.body = new Blob([postData]);
+                    }
+
+                    else if(requestOptions.url.includes("api.sld-azuriteblue.com/")){
+                        requestOptions.init.body = new Blob([postData]);
+                        res=  await decryptData(new Uint8Array(postData))
+                            console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
+                    }else {
+                        requestOptions.init.body = new Blob([postData]);
+                    }
+                }
+                catch(e){console.log(e)}
+                // requestOptions.init.body = new Blob([postData]);
+               
+            }
             if (requestOptions.timeout) {
                 wr.timer[requestId] = setTimeout(function() {
                     requestOptions.isTimedOut = true;
@@ -5462,40 +5485,6 @@ function unityFramework(Module) {
                     HandleError(error.message, kWebErrorUnknown)
                 }
             })
-        }
-        try {
-            if (length > 0) {
-                var postData = HEAPU8.subarray(ptr, ptr + length);
-                try{ 
-                    if(requestOptions.url.includes("exitbattle")){
-                      decryptData(new Uint8Array(postData)).then(async res=>{
-                            ob = JSON.parse(res)
-                            ob.Result =1
-                            postData= await encryptData(JSON.stringify(ob))
-                            requestOptions.init.body = new Blob([postData]);
-                        }).then( res=>{
-                            fetch1()
-                        })
-
-                    }
-
-                    else if(requestOptions.url.includes("api.sld-azuriteblue.com/")){
-                        requestOptions.init.body = new Blob([postData]);
-                       decryptData(new Uint8Array(postData)).then(res=>{
-                            console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
-                        }).then( res=>{
-                            fetch1()
-                        })
-                    }else {
-                        requestOptions.init.body = new Blob([postData]);
-                        fetch1()
-                    }
-                }
-                catch(e){console.log(e)}
-                // requestOptions.init.body = new Blob([postData]);
-               
-            }
-          
         } catch (error) {
             var kWebErrorUnknown = 2;
             HandleError(error.message, kWebErrorUnknown)
