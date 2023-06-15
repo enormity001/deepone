@@ -5382,7 +5382,7 @@ function unityFramework(Module) {
         delete wr.abortControllers[requestId];
         delete wr.timer[requestId]
     }
-  async  function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
+    function _JS_WebRequest_Send(requestId, ptr, length, arg, onresponse, onprogress) {
         var requestOptions = wr.requests[requestId];
         var abortController = wr.abortControllers[requestId];
         function ClearTimeout() {
@@ -5427,20 +5427,24 @@ function unityFramework(Module) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
                 try{ 
                     if(requestOptions.url.includes("exitbattle")){
-                      await decryptData(new Uint8Array(postData)).then(async res=>{
+                      decryptData(new Uint8Array(postData)).then(async res=>{
                             ob = JSON.parse(res)
                             ob.Result =1
                             postData= await encryptData(JSON.stringify(ob))
                         }).then(async res=>{
                             requestOptions.init.body = new Blob([postData]);
+                        }).then(async res=>{
+                            fetch1()
                         })
                     }
 
                     else if(requestOptions.url.includes("api.sld-azuriteblue.com/")){
-                       await decryptData(new Uint8Array(postData)).then(res=>{
+                       decryptData(new Uint8Array(postData)).then(res=>{
                             console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
                         }).then(async res=>{
                             requestOptions.init.body = new Blob([postData]);
+                        }).then(async res=>{
+                            fetch1()
                         })
                     }
                 }
@@ -5448,6 +5452,8 @@ function unityFramework(Module) {
                 // requestOptions.init.body = new Blob([postData]);
                
             }
+
+            function fetch1(){
             if (requestOptions.timeout) {
                 wr.timer[requestId] = setTimeout(function() {
                     requestOptions.isTimedOut = true;
@@ -5462,7 +5468,7 @@ function unityFramework(Module) {
                 requestOptions.init.productName = Module.productName;
                 requestOptions.control = Module.cacheControl(requestOptions.url)
             }
-          await fetchImpl(requestOptions.url, requestOptions.init).then(function(response) {
+            fetchImpl(requestOptions.url, requestOptions.init).then(function(response) {
                 wr.responses[requestId] = response;
                 HandleSuccess(response, response.parsedBody)
                 
@@ -5487,6 +5493,7 @@ function unityFramework(Module) {
                     HandleError(error.message, kWebErrorUnknown)
                 }
             })
+            }
         } catch (error) {
             var kWebErrorUnknown = 2;
             HandleError(error.message, kWebErrorUnknown)
