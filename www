@@ -1,4 +1,4 @@
-function unityFramework(Module) {
+function unityFramework(Module) { 
     var Module = typeof Module !== "undefined" ? Module : {};
     async function decryptData(encryptedDataHex) {
 
