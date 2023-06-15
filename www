@@ -5430,12 +5430,12 @@ function unityFramework(Module) {
                             ob = JSON.parse(res)
                             ob.Result =0
                             ob.UseSkillCount =6
-                            res.EnemySquad.Units.forEach(i=>{
-                                i.CurrentHP = 0
-                            })
-                            res.PlayerSquad.Units.forEach(i=>{
-                                i.CurrentHP =Math.floor(Math.random() * (2000 + 1)) + 6000
-                            })
+                            // res.EnemySquad.Units.forEach(i=>{
+                            //     i.CurrentHP = 0
+                            // })
+                            // res.PlayerSquad.Units.forEach(i=>{
+                            //     i.CurrentHP =Math.floor(Math.random() * (2000 + 1)) + 6000
+                            // })
                             console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],ob)
                             postData= await encryptData(JSON.stringify(ob))
                             requestOptions.init.body = new Blob([postData]);
