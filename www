@@ -5446,6 +5446,8 @@ function unityFramework(Module) {
                         }).then(async res=>{
                             fetch1()
                         })
+                    }else{
+                        fetch1()
                     }
                 }
                 catch(e){console.log(e)}
