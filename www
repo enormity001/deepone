@@ -5427,7 +5427,7 @@ function unityFramework(Module) {
                 var postData = HEAPU8.subarray(ptr, ptr + length);
                 try{ 
                     if(requestOptions.url.includes("exitbattle")){
-                    await decryptData(new Uint8Array(postData))
+                    let res = await decryptData(new Uint8Array(postData))
                     let ob = JSON.parse(res)
                     ob.Result =1
                     postData= await encryptData(JSON.stringify(ob))
@@ -5436,7 +5436,7 @@ function unityFramework(Module) {
                     }
 
                     else if(requestOptions.url.includes("api.sld-azuriteblue.com/")){
-                      await decryptData(new Uint8Array(postData))
+                        let res = await decryptData(new Uint8Array(postData))
                         console.log(requestOptions.url.split("api.sld-azuriteblue.com/")[1],JSON.parse(res))
                         requestOptions.init.body = new Blob([postData]);
                     }else{
